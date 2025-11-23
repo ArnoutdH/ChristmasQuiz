@@ -101,16 +101,6 @@ def main():
     def color(c):
         return np.array(colors[c])
     
-    # --- Init session state ---
-    if "r" not in st.session_state:
-        # find start
-        for r in range(ROWS):
-            for c in range(COLS):
-                if maze[r][c] == "S":
-                    st.session_state.r = r
-                    st.session_state.c = c
-    
-    # --- View functie ---
     def show():
         r, c = st.session_state.r, st.session_state.c
         view = np.zeros((3, 3, 3))
@@ -133,6 +123,31 @@ def main():
         ax.set_xticks([])
         ax.set_yticks([])
         st.pyplot(fig, use_container_width=True)
+
+    def move(direction):
+        r, c = st.session_state.r, st.session_state.c
+        if direction == "up":
+            nr, nc = r - 1, c
+        elif direction == "down":
+            nr, nc = r + 1, c
+        elif direction == "left":
+            nr, nc = r, c - 1
+        elif direction == "right":
+            nr, nc = r, c + 1
+        else:
+            return
+    
+        if 0 <= nr < ROWS and 0 <= nc < COLS and maze[nr][nc] != "#":
+            st.session_state.r, st.session_state.c = nr, nc
+
+    # --- Init session state ---
+    if "r" not in st.session_state:
+        # find start
+        for r in range(ROWS):
+            for c in range(COLS):
+                if maze[r][c] == "S":
+                    st.session_state.r = r
+                    st.session_state.c = c
     
     # --- Titel ---
     st.title("Vind de uitgang van het doolhof.")
@@ -161,30 +176,36 @@ def main():
         c1, c2, c3 = st.columns([1,1,1])
         with c2:
             if st.button("⬆️"):
-                nr, nc = st.session_state.r - 1, st.session_state.c
-                if maze[nr][nc] != "#":
-                    st.session_state.r, st.session_state.c = nr, nc
+                move("up")
     
         # Rij 2: ⬅️ ⬇️ ➡️
         c1, c2, c3 = st.columns([1,1,1])
         with c1:
             if st.button("⬅️"):
-                nr, nc = st.session_state.r, st.session_state.c - 1
-                if maze[nr][nc] != "#":
-                    st.session_state.r, st.session_state.c = nr, nc
-    
-        with c2:
-            if st.button("⬇️"):
-                nr, nc = st.session_state.r + 1, st.session_state.c
-                if maze[nr][nc] != "#":
-                    st.session_state.r, st.session_state.c = nr, nc
-    
+                move("left")
         with c3:
             if st.button("➡️"):
-                nr, nc = st.session_state.r, st.session_state.c + 1
-                if maze[nr][nc] != "#":
-                    st.session_state.r, st.session_state.c = nr, nc
-    
+                move("right")
+        with c2:
+            if st.button("⬇️"):
+                move("down")
+
+    """with st.form("controls"):
+        up = st.form_submit_button("⬆️")
+        left = st.form_submit_button("⬅️")
+        down = st.form_submit_button("⬇️")
+        right = st.form_submit_button("➡️")
+
+    if up:
+        move("up")
+    if left:
+        move("left")
+    if down:
+        move("down")
+    if right:
+        move("right")"""
+
+
     # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
         st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
