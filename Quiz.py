@@ -190,22 +190,6 @@ def main():
             if st.button("⬇️"):
                 move("down")
 
-    """with st.form("controls"):
-        up = st.form_submit_button("⬆️")
-        left = st.form_submit_button("⬅️")
-        down = st.form_submit_button("⬇️")
-        right = st.form_submit_button("➡️")
-
-    if up:
-        move("up")
-    if left:
-        move("left")
-    if down:
-        move("down")
-    if right:
-        move("right")"""
-
-
     # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
         st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
