@@ -166,7 +166,6 @@ def main():
     if maze[st.session_state.r][st.session_state.c] == "E":
         # Wis oude viewport en controls
         title_placeholder.empty()
-        viewport_placeholder.empty()
         controls_placeholder.empty()
 
         # Update titel/status
@@ -190,7 +189,6 @@ def main():
         col1, col2, col3 = st.columns([3,3,1])
         with col3:
             if st.button("➡️ Doorgaan"):
-                title_placeholder.empty()
                 viewport_placeholder.empty()
                 title_placeholder.write('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
 
