@@ -154,7 +154,15 @@ def main():
     title_placeholder = st.empty()
     viewport_placeholder = st.empty()
     controls_placeholder = st.empty()
-
+    
+    # --- Toegang ---
+    title_placeholder.title('Vul hieronder het 4-letterige wachtwoord in:')
+    ww=st.text_input()
+    while ww.lower() != muts:
+        viewport_placeholder.write('Het wachtwoord is NIET correct, probeer het opnieuw.
+        ww=st.text_input()
+    viewport_placeholder=st.empty()
+    
     # --- Status / Titel ---
     title_placeholder.markdown("""
     ### Vind de uitgang van het doolhof
