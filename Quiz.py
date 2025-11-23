@@ -157,6 +157,7 @@ def main():
     
     # --- Toegang ---
     st.session_state.authenticated = False
+    title_placeholder.markdown('Welkom bij deze digitale quizmaster!')
     password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input")
     if st.button("Controleren"):
         if password == "muts":
