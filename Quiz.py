@@ -169,7 +169,7 @@ def main():
     # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
         st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
-         img = np.zeros((ROWS, COLS, 3))
+        img = np.zeros((ROWS, COLS, 3))
 
          for r in range(ROWS):
             for c in range(COLS):
