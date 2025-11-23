@@ -66,6 +66,7 @@ def main():
     import streamlit as st
     import numpy as np
     import matplotlib.pyplot as plt
+    st.set_page_config(layout="wide")    
     
     # --- MAZE ---
     maze = [
@@ -110,7 +111,7 @@ def main():
                     st.session_state.r = r
                     st.session_state.c = c
     
-    # --- Render 3x3 view ---
+    # --- View functie ---
     def show():
         r, c = st.session_state.r, st.session_state.c
         view = np.zeros((3, 3, 3))
@@ -127,59 +128,93 @@ def main():
                 else:
                     view[i, j] = color("#")
     
+        # figuur kleiner maken en automatisch containerbreedte gebruiken
         fig, ax = plt.subplots(figsize=(2, 2))
         ax.imshow(view)
         ax.set_xticks([])
         ax.set_yticks([])
-        st.pyplot(fig)
+        st.pyplot(fig, use_container_width=True)
     
-    # --- Controls ---
-    st.title("Vind de uitgang van het doolhof.\nLet op je kan slechts direct om je heen kijken en het doolhof is totaal 15x15 groot.\nBlauw = start, geel = huidige locatie, rood = uitgang.")
+    # --- Titel ---
+    st.title("Vind de uitgang van het doolhof.")
+    st.write("Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.")
+    st.write("**Blauw = start, geel = huidige locatie, rood = uitgang.**")
     
-    col1, col2, col3 = st.columns(3)
-    with col2:
-        if st.button("⬆️"):
-            nr, nc = st.session_state.r - 1, st.session_state.c
-            if maze[nr][nc] != "#":
-                st.session_state.r, st.session_state.c = nr, nc
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("⬅️"):
-            nr, nc = st.session_state.r, st.session_state.c - 1
-            if maze[nr][nc] != "#":
-                st.session_state.r, st.session_state.c = nr, nc
-    
-    with col3:
-        if st.button("➡️"):
-            nr, nc = st.session_state.r, st.session_state.c + 1
-            if maze[nr][nc] != "#":
-                st.session_state.r, st.session_state.c = nr, nc
-    
-    col1, col2, col3 = st.columns(3)
-    with col2:
-        if st.button("⬇️"):
-            nr, nc = st.session_state.r + 1, st.session_state.c
-            if maze[nr][nc] != "#":
-                st.session_state.r, st.session_state.c = nr, nc
-    
-    # --- Show viewport ---
+    # --- Viewport tonen ---
     show()
+    
+    # --- Mobielvriendelijke joystick controls ---
+    st.write("### Besturing")
+    
+    # Voeg een container toe met een max-width zodat alles netjes past op mobiel
+    with st.container():
+        # Gebruik CSS om knoppen groot en mobielvriendelijk te maken
+        st.markdown("""
+            <style>
+            div.stButton > button {
+                height: 60px;
+                font-size: 24px;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+    
+        # Rij 1: ⬆️
+        c1, c2, c3 = st.columns([1,1,1])
+        with c2:
+            if st.button("⬆️"):
+                nr, nc = st.session_state.r - 1, st.session_state.c
+                if maze[nr][nc] != "#":
+                    st.session_state.r, st.session_state.c = nr, nc
+    
+        # Rij 2: ⬅️ ⬇️ ➡️
+        c1, c2, c3 = st.columns([1,1,1])
+        with c1:
+            if st.button("⬅️"):
+                nr, nc = st.session_state.r, st.session_state.c - 1
+                if maze[nr][nc] != "#":
+                    st.session_state.r, st.session_state.c = nr, nc
+    
+        with c2:
+            if st.button("⬇️"):
+                nr, nc = st.session_state.r + 1, st.session_state.c
+                if maze[nr][nc] != "#":
+                    st.session_state.r, st.session_state.c = nr, nc
+    
+        with c3:
+            if st.button("➡️"):
+                nr, nc = st.session_state.r, st.session_state.c + 1
+                if maze[nr][nc] != "#":
+                    st.session_state.r, st.session_state.c = nr, nc
     
     # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
         st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
+    
+        # Maak een numpy-array van het volledige doolhof
         img = np.zeros((ROWS, COLS, 3))
-
         for r in range(ROWS):
             for c in range(COLS):
-               img[r, c] = colors[maze[r][c]]
+                img[r, c] = colors[maze[r][c]]
+    
+        # ---- Figuur bijna schermvullend en mobielvriendelijk ----
+        fig, ax = plt.subplots(figsize=(8, 8))  # groot op desktop
+        ax.imshow(img)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_title("Volledig doolhof (15×15)", fontsize=16)
+    
+        # Gebruik containerbreedte zodat het op mobiel past
+        st.pyplot(fig, use_container_width=True)
+    
+        # ---- Doorgaan knop rechts-onder ----
+        # Plaats knop in een container met drie kolommen, knop in rechterkolom
+        col1, col2, col3 = st.columns([3, 3, 1])
+        with col3:
+            if st.button("➡️ Doorgaan"):
+                st.session_state.r = 0  # voorbeeld: reset speler
+                st.session_state.c = 0
+                st.experimental_rerun()  # herlaad pagina of ga naar volgende stap
 
-        plt.figure(figsize=(6, 6))
-        plt.imshow(img)
-        plt.title("Volledig doolhof (15×15)")
-        plt.axis('off')
-        plt.show()
 
 if __name__ == "__main__":
     main()
