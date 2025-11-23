@@ -163,14 +163,7 @@ def main():
     # Voeg een container toe met een max-width zodat alles netjes past op mobiel
     with st.container():
         # Gebruik CSS om knoppen groot en mobielvriendelijk te maken
-        #st.markdown("""
-            <style>
-            div.stButton > button {
-                height: 60px;
-                font-size: 24px;
-            }
-            </style>
-        """, unsafe_allow_html=True)
+        #st.markdown("""<style> div.stButton > button {height: 60px; font-size: 24px;}</style> """, unsafe_allow_html=True)
 
         with st.form("controls"):
             up = st.form_submit_button("⬆️")
