@@ -156,12 +156,15 @@ def main():
     controls_placeholder = st.empty()
     
     # --- Toegang ---
-    title_placeholder.title('Vul hieronder het 4-letterige wachtwoord in:')
-    ww=st.text_input('')
-    while ww.lower() != 'muts':
-        viewport_placeholder.markdown('Het wachtwoord is NIET correct, probeer het opnieuw.')
-        ww=st.text_input('')
-    viewport_placeholder=st.empty()
+    st.session_state.authenticated = False
+    password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input")
+    if st.button("Controleren"):
+        if password == "muts":
+            st.session_state.authenticated = True
+            st.success("Codewoord is correct! Ga door!")
+        else:
+            st.error("Codewoord is incorrect. Probeer het opnieuw.")
+            
     
     # --- Status / Titel ---
     title_placeholder.markdown("""
