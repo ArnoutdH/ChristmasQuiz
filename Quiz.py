@@ -156,9 +156,11 @@ def main():
     controls_placeholder = st.empty()
 
     # --- Status / Titel ---
-    title_placeholder.markdown("### Vind de uitgang van het doolhof")
-    title_placeholder.write("Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.")
-    title_placeholder.write("**Blauw = start, geel = huidige locatie, rood = uitgang.**")
+    title_placeholder.markdown("""
+    ### Vind de uitgang van het doolhof
+    Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.  
+    **Blauw = start, geel = huidige locatie, rood = uitgang.**
+    """)
 
     # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
