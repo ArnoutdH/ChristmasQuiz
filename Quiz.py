@@ -134,7 +134,7 @@ def main():
         st.pyplot(fig)
     
     # --- Controls ---
-    st.title("3×3 Maze Memory Game")
+    st.title("Vind de uitgang van het doolhof. Let op je kan slechts direct om je heen kijken en het doolhof is totaal 15x15 \n Blauw=start, geel=huidige locatie, rood is uitgang.")
     
     col1, col2, col3 = st.columns(3)
     with col2:
@@ -169,6 +169,17 @@ def main():
     # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
         st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
+                 img = np.zeros((ROWS, COLS, 3))
+
+         for r in range(ROWS):
+            for c in range(COLS):
+               img[r, c] = colors[maze[r][c]]
+
+         plt.figure(figsize=(6, 6))
+         plt.imshow(img)
+         plt.title("Volledig doolhof (15×15)")
+         plt.axis('off')
+         plt.show()
 
 if __name__ == "__main__":
     main()
