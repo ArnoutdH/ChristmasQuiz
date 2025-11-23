@@ -154,6 +154,7 @@ def main():
 
     # --- Check if exit reached ---
     if maze[st.session_state.r][st.session_state.c] == "E":
+        plt.close()
         st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
 
         # Maak volledig doolhof
@@ -174,13 +175,8 @@ def main():
         col1, col2, col3 = st.columns([3,3,1])
         with col3:
             if st.button("➡️ Doorgaan"):
-                # Reset of volgende stap
-                for r in range(ROWS):
-                    for c in range(COLS):
-                        if maze[r][c] == "S":
-                            st.session_state.r = r
-                            st.session_state.c = c
-                st.experimental_rerun()
+              plt.close()
+                st.title('Je bent uit de escape room! \nJe tijd is opgeslagen.')
 
     else:
         # --- Mobielvriendelijke joystick ---
