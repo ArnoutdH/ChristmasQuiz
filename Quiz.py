@@ -175,7 +175,7 @@ def main():
         col1, col2, col3 = st.columns([3,3,1])
         with col3:
             if st.button("➡️ Doorgaan"):
-              plt.close()
+                plt.close()
                 st.title('Je bent uit de escape room! \nJe tijd is opgeslagen.')
 
     else:
