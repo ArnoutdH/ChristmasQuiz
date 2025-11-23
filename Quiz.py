@@ -5,10 +5,6 @@ from gspread.exceptions import WorksheetNotFound
 from datetime import date
 from googleapiclient.discovery import build
 
-# === CONFIGURATION ===
-HEADERS = ["Datum", "Kilometers", "Bestemming", "Reden"]  # Column headers
-names = ["Arnout", "Astrid", 'Anders...']
-
 # === AUTHENTICATION ===
 def get_gspread_client():
     creds_dict = st.secrets["gcp_service_account"]
@@ -67,47 +63,112 @@ def get_or_create_sheet(spreadsheet, sheet_name):
 
 # === MAIN APP ===
 def main():    
-    st.title("📋 Gegevens over mijn reis invoeren:")
+    import streamlit as st
+    import numpy as np
+    import matplotlib.pyplot as plt
     
-    selected = st.selectbox("Wie: ", names)
-    if selected == "Anders...":
-        custom_name = st.text_input("Vul de naam in:")
-        sheet_name = custom_name.strip()
-    else:
-        sheet_name = selected
-
-    datum = st.date_input("Wanneer: ", value=date.today())
-    formatted_datum = datum.strftime("%d-%m-%Y")
-
-    kilometers = st.number_input("Hoeveel kilometers: ", min_value=0.0, format="%.1f", step=1.0,value=0.0)
-    bestemming = st.text_input("Bestemming: ")
-    reden = st.text_input("Waarom: ")
+    # --- MAZE ---
+    maze = [
+       "###############",
+       "#S...#.#......#",
+       "#.##.#.###.####",
+       "#.#..#.#......#",
+       "#.#.##.#.###.##",
+       "#.#....#.#.#..#",
+       "#.####.#.#.##.#",
+       "#....###.#.#..#",
+       "####.#...#...##",
+       "#....#.#.#.#.##",
+       "#.####.#.###.##",
+       "#.#....#.#....#",
+       "#.#.##.####.###",
+       "#....##......E#",
+       "###############"
+    ]
     
-    # Authenticate gspread client
-    client, creds = get_gspread_client()
+    ROWS = len(maze)
+    COLS = len(maze[0])
     
-    # Find latest spreadsheet in 'Kilometers' folder
-    latest_file = get_latest_spreadsheet(creds=creds, folder_name='Kilometers')
-    if latest_file:
-        st.write(f"Gebruikt nieuwste spreadsheet: {latest_file['name']}")
-        spreadsheet = client.open_by_key(latest_file['id'])
-    else:
-        st.warning("Geen spreadsheet gevonden in de 'Kilometers' map.")
-        return
-
-    # Get or create the worksheet (tab) inside spreadsheet
-    sheet = get_or_create_sheet(spreadsheet, sheet_name)
-
-    if st.button("Verzenden"):
-        if not datum or not kilometers or not sheet_name:
-            st.warning("Vul alle velden in.")
-            return
-
-        try:
-            sheet.append_row([formatted_datum, kilometers, bestemming, reden])
-            st.success(f"✅ Gegevens succesvol toegevoegd aan het tabblad: {sheet_name}")
-        except Exception as e:
-            st.error(f"❌ Fout bij het verzenden: {e}")
+    # --- Colors for visualization ---
+    colors = {
+        "#": (0.1, 0.1, 0.1),
+        ".": (1, 1, 1),
+        "S": (0.2, 0.6, 1),
+        "E": (1, 0.3, 0.3),
+        "P": (1, 0.8, 0),
+    }
+    
+    def color(c):
+        return np.array(colors[c])
+    
+    # --- Init session state ---
+    if "r" not in st.session_state:
+        # find start
+        for r in range(ROWS):
+            for c in range(COLS):
+                if maze[r][c] == "S":
+                    st.session_state.r = r
+                    st.session_state.c = c
+    
+    # --- Render 3x3 view ---
+    def show():
+        r, c = st.session_state.r, st.session_state.c
+        view = np.zeros((3, 3, 3))
+    
+        for i, dr in enumerate([-1, 0, 1]):
+            for j, dc in enumerate([-1, 0, 1]):
+                rr = r + dr
+                cc = c + dc
+    
+                if (rr, cc) == (r, c):
+                    view[i, j] = color("P")
+                elif 0 <= rr < ROWS and 0 <= cc < COLS:
+                    view[i, j] = color(maze[rr][cc])
+                else:
+                    view[i, j] = color("#")
+    
+        fig, ax = plt.subplots(figsize=(3, 3))
+        ax.imshow(view)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        st.pyplot(fig)
+    
+    # --- Controls ---
+    st.title("3×3 Maze Memory Game")
+    
+    col1, col2, col3 = st.columns(3)
+    with col2:
+        if st.button("⬆️"):
+            nr, nc = st.session_state.r - 1, st.session_state.c
+            if maze[nr][nc] != "#":
+                st.session_state.r, st.session_state.c = nr, nc
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("⬅️"):
+            nr, nc = st.session_state.r, st.session_state.c - 1
+            if maze[nr][nc] != "#":
+                st.session_state.r, st.session_state.c = nr, nc
+    
+    with col3:
+        if st.button("➡️"):
+            nr, nc = st.session_state.r, st.session_state.c + 1
+            if maze[nr][nc] != "#":
+                st.session_state.r, st.session_state.c = nr, nc
+    
+    col1, col2, col3 = st.columns(3)
+    with col2:
+        if st.button("⬇️"):
+            nr, nc = st.session_state.r + 1, st.session_state.c
+            if maze[nr][nc] != "#":
+                st.session_state.r, st.session_state.c = nr, nc
+    
+    # --- Show viewport ---
+    show()
+    
+    # --- Check exit ---
+    if maze[st.session_state.r][st.session_state.c] == "E":
+        st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
 
 if __name__ == "__main__":
     main()
