@@ -187,9 +187,11 @@ def main():
 
         # Doorgaan knop rechts onder
         col1, col2, col3 = st.columns([3,3,1])
+        clicked=controls_placeholder.button("➡️ Doorgaan")
         with col3:
-            if st.button("➡️ Doorgaan"):
+            if clicked:
                 viewport_placeholder.empty()
+                controls_placeholder.empty()
                 title_placeholder.write('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
 
     else:
