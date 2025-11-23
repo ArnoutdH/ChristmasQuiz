@@ -192,7 +192,7 @@ def main():
             if clicked:
                 viewport_placeholder.empty()
                 controls_placeholder.empty()
-                title_placeholder.write('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
+                title_placeholder.title('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
 
     else:
         # --- Mobielvriendelijke joystick ---
