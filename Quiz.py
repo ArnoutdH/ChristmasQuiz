@@ -157,12 +157,13 @@ def main():
 
     # --- Status / Titel ---
     title_placeholder.markdown("### Vind de uitgang van het doolhof")
-    st.write("Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.")
-    st.write("**Blauw = start, geel = huidige locatie, rood = uitgang.**")
+    title_placeholder.write("Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.")
+    title_placeholder.write("**Blauw = start, geel = huidige locatie, rood = uitgang.**")
 
     # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
         # Wis oude viewport en controls
+        title_placeholder.empty()
         viewport_placeholder.empty()
         controls_placeholder.empty()
 
@@ -187,7 +188,9 @@ def main():
         col1, col2, col3 = st.columns([3,3,1])
         with col3:
             if st.button("➡️ Doorgaan"):
-                st.write('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
+                title_placeholder.empty()
+                viewport_placeholder.empty()
+                title_placeholder.write('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
 
     else:
         # --- Mobielvriendelijke joystick ---
