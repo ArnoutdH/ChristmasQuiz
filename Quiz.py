@@ -175,11 +175,11 @@ def main():
             for c in range(COLS):
                img[r, c] = colors[maze[r][c]]
 
-         plt.figure(figsize=(6, 6))
-         plt.imshow(img)
-         plt.title("Volledig doolhof (15×15)")
-         plt.axis('off')
-         plt.show()
+        plt.figure(figsize=(6, 6))
+        plt.imshow(img)
+        plt.title("Volledig doolhof (15×15)")
+        plt.axis('off')
+        plt.show()
 
 if __name__ == "__main__":
     main()
