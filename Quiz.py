@@ -64,6 +64,10 @@ def get_or_create_sheet(spreadsheet, sheet_name):
     return sheet
 
 # === MAIN APP ===
+import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
+
 def main():
     st.set_page_config(layout="wide")    
 
@@ -89,7 +93,7 @@ def main():
     ROWS = len(maze)
     COLS = len(maze[0])
 
-    # --- Colors for visualization ---
+    # --- Colors ---
     colors = {
         "#": (0.1, 0.1, 0.1),
         ".": (1, 1, 1),
@@ -119,7 +123,7 @@ def main():
             st.session_state.r, st.session_state.c = nr, nc
 
     # --- Viewport function ---
-    def show():
+    def show_viewport():
         r, c = st.session_state.r, st.session_state.c
         view = np.zeros((3, 3, 3))
         for i, dr in enumerate([-1, 0, 1]):
@@ -136,52 +140,62 @@ def main():
         ax.imshow(view)
         ax.set_xticks([])
         ax.set_yticks([])
-        st.pyplot(fig, use_container_width=True)
+        return fig
 
     # --- Initialize session state ---
     if "r" not in st.session_state or "c" not in st.session_state:
-        # find start
         for r in range(ROWS):
             for c in range(COLS):
                 if maze[r][c] == "S":
                     st.session_state.r = r
                     st.session_state.c = c
 
-    # --- Title ---
-    st.title("Vind de uitgang van het doolhof.")
+    # --- Placeholders ---
+    title_placeholder = st.empty()
+    viewport_placeholder = st.empty()
+    controls_placeholder = st.empty()
+
+    # --- Status / Titel ---
+    title_placeholder.markdown("### Vind de uitgang van het doolhof")
     st.write("Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.")
     st.write("**Blauw = start, geel = huidige locatie, rood = uitgang.**")
 
-    # --- Check if exit reached ---
+    # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
-        plt.close()
-        st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
+        # Wis oude viewport en controls
+        viewport_placeholder.empty()
+        controls_placeholder.empty()
+
+        # Update titel/status
+        title_placeholder.markdown("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
 
         # Maak volledig doolhof
-        img = np.zeros((ROWS, COLS, 3))
+        full_maze = np.zeros((ROWS, COLS, 3))
         for r in range(ROWS):
             for c in range(COLS):
-                img[r, c] = colors[maze[r][c]]
+                full_maze[r, c] = colors[maze[r][c]]
 
-        # ---- Groot figuur, mobielvriendelijk ----
+        # Toon figuur
         fig, ax = plt.subplots(figsize=(8,8))
-        ax.imshow(img)
+        ax.imshow(full_maze)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_title("Volledig doolhof", fontsize=16)
-        st.pyplot(fig, use_container_width=True)
+        viewport_placeholder.pyplot(fig, use_container_width=True)
 
-        # ---- Doorgaan knop rechts-onder ----
+        # Doorgaan knop rechts onder
         col1, col2, col3 = st.columns([3,3,1])
         with col3:
             if st.button("➡️ Doorgaan"):
-                plt.close()
-                st.title('Je bent uit de escape room! \nJe tijd is opgeslagen.')
+                st.write('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
 
     else:
+        # --- Toon lokale viewport ---
+        fig = show_viewport()
+        viewport_placeholder.pyplot(fig, use_container_width=True)
+
         # --- Mobielvriendelijke joystick ---
-        st.write("### Besturing")
-        with st.container():
+        with controls_placeholder.container():
             st.markdown("""
                 <style>
                 div.stButton > button {
@@ -207,6 +221,7 @@ def main():
             with c3:
                 if st.button("➡️"):
                     move("right")
+
     # --- Toon lokale viewport ---
     show()
     
