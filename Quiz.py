@@ -62,10 +62,7 @@ def get_or_create_sheet(spreadsheet, sheet_name):
     return sheet
 
 # === MAIN APP ===
-def main():    
-    import streamlit as st
-    import numpy as np
-    import matplotlib.pyplot as plt
+def main():
     st.set_page_config(layout="wide")    
     
     # --- MAZE ---
@@ -201,7 +198,7 @@ def main():
         ax.imshow(img)
         ax.set_xticks([])
         ax.set_yticks([])
-        ax.set_title("Volledig doolhof (15×15)", fontsize=16)
+        ax.set_title("Volledig doolhof", fontsize=16)
     
         # Gebruik containerbreedte zodat het op mobiel past
         st.pyplot(fig, use_container_width=True)
