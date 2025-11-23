@@ -190,10 +190,6 @@ def main():
                 st.write('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
 
     else:
-        # --- Toon lokale viewport ---
-        fig = show_viewport()
-        viewport_placeholder.pyplot(fig, use_container_width=True)
-
         # --- Mobielvriendelijke joystick ---
         with controls_placeholder.container():
             st.markdown("""
@@ -221,6 +217,9 @@ def main():
             with c3:
                 if st.button("➡️"):
                     move("right")
+        # --- Toon lokale viewport ---
+        fig = show_viewport()
+        viewport_placeholder.pyplot(fig, use_container_width=True)
     
 if __name__ == "__main__":
     main()
