@@ -201,7 +201,7 @@ def main():
                 <style>
                 div.stButton > button {
                     height: 100px;
-                    width: 100%;
+                    width: 300px;
                     font-size: 90px;
                 }
                 </style>
