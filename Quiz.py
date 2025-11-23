@@ -156,15 +156,20 @@ def main():
     controls_placeholder = st.empty()
     
     # --- Toegang ---
-    st.session_state.authenticated = False
-    title_placeholder.markdown('Welkom bij deze digitale quizmaster!')
-    password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input")
-    if st.button("Controleren"):
-        if password == "muts":
-            st.session_state.authenticated = True
-        else:
-            st.error("Codewoord is incorrect. Probeer het opnieuw.")
-            
+    # Auth status alleen aanmaken als die nog niet bestaat
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+    if not st.session_state.authenticated:
+        title_placeholder.markdown('Welkom bij deze digitale quizmaster!')
+        password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input")
+        if st.button("Controleren"):
+            if password == "muts":
+                st.session_state.authenticated = True
+                st.session_state.password_input = ""  # invoer wissen
+                st.experimental_rerun() 
+            else:
+                st.error("Codewoord is incorrect. Probeer het opnieuw.")
+                
     if st.session_state.authenticated == True:
         # --- Status / Titel ---
         title_placeholder.markdown("""
@@ -176,7 +181,6 @@ def main():
         # --- Check exit ---
         if maze[st.session_state.r][st.session_state.c] == "E":
             # Wis oude viewport en controls
-            title_placeholder.empty()
             controls_placeholder.empty()
     
             # Update titel/status
