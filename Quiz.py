@@ -159,7 +159,7 @@ def main():
     title_placeholder.title('Vul hieronder het 4-letterige wachtwoord in:')
     ww=st.text_input()
     while ww.lower() != muts:
-        viewport_placeholder.markdown('Het wachtwoord is NIET correct, probeer het opnieuw.
+        viewport_placeholder.markdown('Het wachtwoord is NIET correct, probeer het opnieuw.')
         ww=st.text_input()
     viewport_placeholder=st.empty()
     
