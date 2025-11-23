@@ -134,7 +134,7 @@ def main():
         st.pyplot(fig)
     
     # --- Controls ---
-    st.title("Vind de uitgang van het doolhof. Let op je kan slechts direct om je heen kijken en het doolhof is totaal 15x15 \n Blauw=start, geel=huidige locatie, rood is uitgang.")
+    st.title("Vind de uitgang van het doolhof.\nLet op je kan slechts direct om je heen kijken en het doolhof is totaal 15x15 groot.\nBlauw = start, geel = huidige locatie, rood = uitgang.")
     
     col1, col2, col3 = st.columns(3)
     with col2:
