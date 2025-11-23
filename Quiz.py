@@ -5,6 +5,7 @@ from gspread.exceptions import WorksheetNotFound
 from datetime import date
 from googleapiclient.discovery import build
 import numpy as np
+import matplotlib.pyplot as plt
 
 # === AUTHENTICATION ===
 def get_gspread_client():
