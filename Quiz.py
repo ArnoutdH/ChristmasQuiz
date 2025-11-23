@@ -183,9 +183,6 @@ def main():
                 st.experimental_rerun()
 
     else:
-        # --- Toon lokale viewport ---
-        show()
-
         # --- Mobielvriendelijke joystick ---
         st.write("### Besturing")
         with st.container():
@@ -214,6 +211,8 @@ def main():
             with c3:
                 if st.button("➡️"):
                     move("right")
-
+    # --- Toon lokale viewport ---
+    show()
+    
 if __name__ == "__main__":
     main()
