@@ -171,7 +171,7 @@ def main():
         st.success("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
         img = np.zeros((ROWS, COLS, 3))
 
-         for r in range(ROWS):
+        for r in range(ROWS):
             for c in range(COLS):
                img[r, c] = colors[maze[r][c]]
 
