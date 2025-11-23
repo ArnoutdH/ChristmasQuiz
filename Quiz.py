@@ -165,7 +165,7 @@ def main():
         if st.button("Controleren"):
             if password == "muts":
                 st.session_state.authenticated = True
-                st.session_state.password_input = ""  # invoer wissen
+                st.session_state["password_input"] = ""  # invoer wissen
                 st.experimental_rerun() 
             else:
                 st.error("Codewoord is incorrect. Probeer het opnieuw.")
