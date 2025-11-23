@@ -163,7 +163,7 @@ def main():
     # Voeg een container toe met een max-width zodat alles netjes past op mobiel
     with st.container():
         # Gebruik CSS om knoppen groot en mobielvriendelijk te maken
-        st.markdown("""
+        #st.markdown("""
             <style>
             div.stButton > button {
                 height: 60px;
@@ -171,24 +171,21 @@ def main():
             }
             </style>
         """, unsafe_allow_html=True)
-    
-        # Rij 1: ⬆️
-        c1, c2, c3 = st.columns([1,1,1])
-        with c2:
-            if st.button("⬆️"):
-                move("up")
-    
-        # Rij 2: ⬅️ ⬇️ ➡️
-        c1, c2, c3 = st.columns([1,1,1])
-        with c1:
-            if st.button("⬅️"):
-                move("left")
-        with c3:
-            if st.button("➡️"):
-                move("right")
-        with c2:
-            if st.button("⬇️"):
-                move("down")
+
+        with st.form("controls"):
+            up = st.form_submit_button("⬆️")
+            left = st.form_submit_button("⬅️")
+            down = st.form_submit_button("⬇️")
+            right = st.form_submit_button("➡️")
+        
+        if up:
+            move("up")
+        if left:
+            move("left")
+        if down:
+            move("down")
+        if right:
+            move("right")
 
     # --- Check exit ---
     if maze[st.session_state.r][st.session_state.c] == "E":
