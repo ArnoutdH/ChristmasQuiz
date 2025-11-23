@@ -4,6 +4,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from gspread.exceptions import WorksheetNotFound
 from datetime import date
 from googleapiclient.discovery import build
+import numpy as np
 
 # === AUTHENTICATION ===
 def get_gspread_client():
