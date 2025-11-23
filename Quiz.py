@@ -127,7 +127,7 @@ def main():
                 else:
                     view[i, j] = color("#")
     
-        fig, ax = plt.subplots(figsize=(3, 3))
+        fig, ax = plt.subplots(figsize=(2, 2))
         ax.imshow(view)
         ax.set_xticks([])
         ax.set_yticks([])
