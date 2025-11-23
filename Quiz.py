@@ -221,9 +221,6 @@ def main():
             with c3:
                 if st.button("➡️"):
                     move("right")
-
-    # --- Toon lokale viewport ---
-    show()
     
 if __name__ == "__main__":
     main()
