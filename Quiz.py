@@ -165,78 +165,78 @@ def main():
         else:
             st.error("Codewoord is incorrect. Probeer het opnieuw.")
             
+    if st.session_state.authenticated == True:
+        # --- Status / Titel ---
+        title_placeholder.markdown("""
+        ### Vind de uitgang van het doolhof
+        Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.  
+        **Blauw = start, geel = huidige locatie, rood = uitgang.**
+        """)
     
-    # --- Status / Titel ---
-    title_placeholder.markdown("""
-    ### Vind de uitgang van het doolhof
-    Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.  
-    **Blauw = start, geel = huidige locatie, rood = uitgang.**
-    """)
-
-    # --- Check exit ---
-    if maze[st.session_state.r][st.session_state.c] == "E":
-        # Wis oude viewport en controls
-        title_placeholder.empty()
-        controls_placeholder.empty()
-
-        # Update titel/status
-        title_placeholder.markdown("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
-
-        # Maak volledig doolhof
-        full_maze = np.zeros((ROWS, COLS, 3))
-        for r in range(ROWS):
-            for c in range(COLS):
-                full_maze[r, c] = colors[maze[r][c]]
-
-        # Toon figuur
-        fig, ax = plt.subplots(figsize=(8,8))
-        ax.imshow(full_maze)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_title("Volledig doolhof", fontsize=16)
-        viewport_placeholder.pyplot(fig, use_container_width=True)
-
-        # Doorgaan knop rechts onder
-        col1, col2, col3 = st.columns([3,3,1])
-        clicked=controls_placeholder.button("➡️ Doorgaan")
-        with col3:
-            if clicked:
-                viewport_placeholder.empty()
-                controls_placeholder.empty()
-                title_placeholder.title('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
-
-    else:
-        # --- Mobielvriendelijke joystick ---
-        with controls_placeholder.container():
-            st.markdown("""
-                <style>
-                div.stButton > button {
-                    height: 60px;
-                    width: 80px;
-                    font-size: 40px;
-                }
-                </style>
-            """, unsafe_allow_html=True)
-
-            # Rij 1: Up
-            c1, c2, c3 = st.columns([1,1,1])
-            with c2:
-                if st.button("⬆️"):
-                    move("up")
-            # Rij 2: Left, Down, Right
-            c1, c2, c3 = st.columns([1,1,1])
-            with c1:
-                if st.button("⬅️"):
-                    move("left")
-            with c2:
-                if st.button("⬇️"):
-                    move("down")
-            with c3:
-                if st.button("➡️"):
-                    move("right")
-        # --- Toon lokale viewport ---
-        fig = show_viewport()
-        viewport_placeholder.pyplot(fig, use_container_width=True)
+        # --- Check exit ---
+        if maze[st.session_state.r][st.session_state.c] == "E":
+            # Wis oude viewport en controls
+            title_placeholder.empty()
+            controls_placeholder.empty()
+    
+            # Update titel/status
+            title_placeholder.markdown("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
+    
+            # Maak volledig doolhof
+            full_maze = np.zeros((ROWS, COLS, 3))
+            for r in range(ROWS):
+                for c in range(COLS):
+                    full_maze[r, c] = colors[maze[r][c]]
+    
+            # Toon figuur
+            fig, ax = plt.subplots(figsize=(8,8))
+            ax.imshow(full_maze)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.set_title("Volledig doolhof", fontsize=16)
+            viewport_placeholder.pyplot(fig, use_container_width=True)
+    
+            # Doorgaan knop rechts onder
+            col1, col2, col3 = st.columns([3,3,1])
+            clicked=controls_placeholder.button("➡️ Doorgaan")
+            with col3:
+                if clicked:
+                    viewport_placeholder.empty()
+                    controls_placeholder.empty()
+                    title_placeholder.title('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
+    
+        else:
+            # --- Mobielvriendelijke joystick ---
+            with controls_placeholder.container():
+                st.markdown("""
+                    <style>
+                    div.stButton > button {
+                        height: 60px;
+                        width: 80px;
+                        font-size: 40px;
+                    }
+                    </style>
+                """, unsafe_allow_html=True)
+    
+                # Rij 1: Up
+                c1, c2, c3 = st.columns([1,1,1])
+                with c2:
+                    if st.button("⬆️"):
+                        move("up")
+                # Rij 2: Left, Down, Right
+                c1, c2, c3 = st.columns([1,1,1])
+                with c1:
+                    if st.button("⬅️"):
+                        move("left")
+                with c2:
+                    if st.button("⬇️"):
+                        move("down")
+                with c3:
+                    if st.button("➡️"):
+                        move("right")
+            # --- Toon lokale viewport ---
+            fig = show_viewport()
+            viewport_placeholder.pyplot(fig, use_container_width=True)
     
 if __name__ == "__main__":
     main()
