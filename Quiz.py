@@ -162,7 +162,6 @@ def main():
     if st.button("Controleren"):
         if password == "muts":
             st.session_state.authenticated = True
-            st.success("Codewoord is correct! Ga door!")
         else:
             st.error("Codewoord is incorrect. Probeer het opnieuw.")
             
