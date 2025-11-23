@@ -200,9 +200,9 @@ def main():
             st.markdown("""
                 <style>
                 div.stButton > button {
-                    height: 100px;
-                    width: 200px;
-                    font-size: 200px;
+                    height: 60px;
+                    width: 80px;
+                    font-size: 40px;
                 }
                 </style>
             """, unsafe_allow_html=True)
