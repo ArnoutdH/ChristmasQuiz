@@ -201,8 +201,8 @@ def main():
                 <style>
                 div.stButton > button {
                     height: 100px;
-                    width: 300px;
-                    font-size: 90px;
+                    width: 200px;
+                    font-size: 200px;
                 }
                 </style>
             """, unsafe_allow_html=True)
