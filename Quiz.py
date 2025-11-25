@@ -130,7 +130,7 @@ def main():
     if not st.session_state.auth0:
         title_placeholder.markdown('Welkom bij deze digitale quizmaster!')
         password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input0")
-        if st.button("Controleren"):
+        if st.button("Controleren:")
             if password.lower() == "muts":
                 st.session_state.auth0 = True
             else:
@@ -181,7 +181,7 @@ def main():
             3: {"Wie": "Clara", "Waar": "Kerststal", "Wat": "Kerstmok", "Welke kleur": "Groen"}}
         
         st.header("Controle")
-        if st.button("Controleer oplossing"):
+        if st.button("Controleer oplossing:")
             alles_correct = True
             for rij in range(1, 4):
                 for kolom in headers:
@@ -201,7 +201,7 @@ def main():
         st.header('Geef de EERSTE LETTER van onderstaande omschrijvingen als antwoord (zet de artiesten van jong (A) naar oud (B)):')
         st.write('1. Eerste (artiesten)naam van persoon A \n2. Tweede (artiesten)naam van persoon A \n3. Eerste (artiesten)naam van persoon B \n4. Tweede (artiesten)naam van persoon B.')
         password = st.text_input('Vul hieronder de 4 letters in:', type="password", key="password_input2")
-        if st.button("Controleren"):
+        if st.button("Controleren:")
             if password.lower() == "esej":
                 st.session_state.auth2 = True
             else:
@@ -228,7 +228,7 @@ def main():
     if not st.session_state.auth3 and (st.session_state.auth0 and st.session_state.auth1 and st.session_state.auth2):
         st.header('Geef het codewoord hieronder op:')
         password = st.text_input('Vul hieronder het codewoord in:', type="password", key="password_input3")
-        if st.button("Controleren"):
+        if st.button("Controleren:")
             if password.lower() == "sneeuw":
                 st.session_state.auth3 = True
             else:
