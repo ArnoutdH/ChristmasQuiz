@@ -124,12 +124,14 @@ def main():
         st.session_state.auth1 = False
     if "auth2" not in st.session_state:
         st.session_state.auth2 = False
+    if "auth3" not in st.session_state:
+        st.session_state.auth3 = False
     
     if not st.session_state.auth0:
         title_placeholder.markdown('Welkom bij deze digitale quizmaster!')
         password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input")
         if st.button("Controleren"):
-            if password == "muts":
+            if password.lower() == "muts":
                 st.session_state.auth0 = True
             else:
                 st.error("Het codewoord is incorrect. Probeer het opnieuw.")
@@ -196,29 +198,64 @@ def main():
                 st.error("Probeer het opnieuw, er is minimaal 1 veld verkeerd ingevuld!")
 
     if not st.session_state.auth2 and (st.session_state.auth0 and st.session_state.auth1):
+        st.header('Geef de EERSTE LETTER van onderstaande omschrijvingen als antwoord (zet de artiesten van jong (A) naar oud (B)):')
+        st.write('1. Eerste (artiesten)naam van persoon A \n2. Tweede (artiesten)naam van persoon A \n3. Eerste (artiesten)naam van persoon B \n4. Tweede (artiesten)naam van persoon B.')
+        password = st.text_input('Vul hieronder de 4 letters in:', type="password", key="password_input")
+        if st.button("Controleren"):
+            if password.lower() == "esej":
+                st.session_state.auth2 = True
+            else:
+                st.error("Het is niet correct. Probeer het opnieuw.")
+        
+        # Bestand openen
+        audio_file = open("10.Translate_liedtekst.mp3", "rb").read()
+        audio_base64 = base64.b64encode(audio_file).decode()
+        
+        # HTML audio player met controls
+        audio_player = f"""
+        <audio id="myAudio" controls>
+          <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
+          Your browser does not support the audio element.
+        </audio>
+        <br>
+        <button onclick="document.getElementById('myAudio').play()">▶️ Play</button>
+        <button onclick="document.getElementById('myAudio').pause()">⏸️ Pauze</button>
+        <button onclick="document.getElementById('myAudio').currentTime=0; document.getElementById('myAudio').pause()">🔄 Reset</button>
+        """
 
-# Bestand openen
-audio_file = open("geluid.mp3", "rb").read()
-audio_base64 = base64.b64encode(audio_file).decode()
+        st.markdown(audio_player, unsafe_allow_html=True)
 
-# HTML audio player met controls
-audio_player = f"""
-<audio id="myAudio" controls>
-  <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
-  Your browser does not support the audio element.
-</audio>
-<br>
-<button onclick="document.getElementById('myAudio').play()">▶️ Play</button>
-<button onclick="document.getElementById('myAudio').pause()">⏸️ Pauze</button>
-<button onclick="document.getElementById('myAudio').currentTime=0; document.getElementById('myAudio').pause()">🔄 Reset</button>
-"""
+    if not st.session_state.auth3 and (st.session_state.auth0 and st.session_state.auth1 and st.session_state.auth2):
+        st.header('Geef het codewoord hieronder op:')
+        password = st.text_input('Vul hieronder het codewoord in:', type="password", key="password_input")
+        if st.button("Controleren"):
+            if password.lower() == "sneeuw":
+                st.session_state.auth3 = True
+            else:
+                st.error("Het is niet correct. Probeer het opnieuw.")
+        
+        # Bestand openen
+        audio_file = open("6.Muziekcompilatie.mp3", "rb").read()
+        audio_base64 = base64.b64encode(audio_file).decode()
+        
+        # HTML audio player met controls
+        audio_player = f"""
+        <audio id="myAudio" controls>
+          <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
+          Your browser does not support the audio element.
+        </audio>
+        <br>
+        <button onclick="document.getElementById('myAudio').play()">▶️ Play</button>
+        <button onclick="document.getElementById('myAudio').pause()">⏸️ Pauze</button>
+        <button onclick="document.getElementById('myAudio').currentTime=0; document.getElementById('myAudio').pause()">🔄 Reset</button>
+        """
 
-st.markdown(audio_player, unsafe_allow_html=True)
+        st.markdown(audio_player, unsafe_allow_html=True)
 
 
 
     
-    if st.session_state.auth0 and st.session_state.auth1:
+    if st.session_state.auth0 and st.session_state.auth1 and st.session_state.auth2 and st.session_state.auth3:
         # --- MAZE ---
         maze = [
            "###############",
