@@ -181,7 +181,7 @@ def main():
             3: {"Wie": "Clara", "Waar": "Kerststal", "Wat": "Kerstmok", "Welke kleur": "Groen"}}
         
         st.header("Controle")
-        if st.button("Controleer oplossing:")
+        if st.button("Controleren"):
             alles_correct = True
             for rij in range(1, 4):
                 for kolom in headers:
