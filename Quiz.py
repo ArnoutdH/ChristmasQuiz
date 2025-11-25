@@ -16,7 +16,7 @@ def get_gspread_client():
 
     scope = ["https://spreadsheets.google.com/feeds",
         "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    creds = ServiceAccountCredentials.from_json_file_dict(creds_dict, scope)
     return gspread.authorize(creds), creds
 
 # === DRIVE API: Find latest spreadsheet in folder ===
@@ -130,7 +130,7 @@ def main():
     if not st.session_state.auth0:
         title_placeholder.markdown('Welkom bij deze digitale quizmaster!')
         password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input0")
-        if st.button("Controleren"):
+        if st.button("Controleren",key=0):
             if password.lower() == "muts":
                 st.session_state.auth0 = True
             else:
@@ -181,7 +181,7 @@ def main():
             3: {"Wie": "Clara", "Waar": "Kerststal", "Wat": "Kerstmok", "Welke kleur": "Groen"}}
         
         st.header("Controle")
-        if st.button("Controleren"):
+        if st.button("Controleren",key=1):
             alles_correct = True
             for rij in range(1, 4):
                 for kolom in headers:
@@ -201,7 +201,7 @@ def main():
         st.header('Geef de EERSTE LETTER van onderstaande omschrijvingen als antwoord (zet de artiesten van jong (A) naar oud (B)):')
         st.write('1. Eerste (artiesten)naam van persoon A \n2. Tweede (artiesten)naam van persoon A \n3. Eerste (artiesten)naam van persoon B \n4. Tweede (artiesten)naam van persoon B.')
         password = st.text_input('Vul hieronder de 4 letters in:', type="password", key="password_input2")
-        if st.button("Controleren"):
+        if st.button("Controleren".key=2):
             if password.lower() == "esej":
                 st.session_state.auth2 = True
             else:
@@ -228,7 +228,7 @@ def main():
     if not st.session_state.auth3 and (st.session_state.auth0 and st.session_state.auth1 and st.session_state.auth2):
         st.header('Geef het codewoord hieronder op:')
         password = st.text_input('Vul hieronder het codewoord in:', type="password", key="password_input3")
-        if st.button("Controleren"):
+        if st.button("Controleren",key=3):
             if password.lower() == "sneeuw":
                 st.session_state.auth3 = True
             else:
@@ -325,7 +325,7 @@ def main():
     
             # Doorgaan knop rechts onder
             col1, col2, col3 = st.columns([3,3,1])
-            clicked=controls_placeholder.button("➡️ Doorgaan")
+            clicked=controls_placeholder.button("➡️ Doorgaan",key=4)
             with col3:
                 if clicked:
                     viewport_placeholder.empty()
@@ -348,18 +348,18 @@ def main():
                 # Rij 1: Up
                 c1, c2, c3 = st.columns([1,1,1])
                 with c2:
-                    if st.button("⬆️"):
+                    if st.button("⬆️",key=4a):
                         move("up")
                 # Rij 2: Left, Down, Right
                 c1, c2, c3 = st.columns([1,1,1])
                 with c1:
-                    if st.button("⬅️"):
+                    if st.button("⬅️",key=4b):
                         move("left")
                 with c2:
-                    if st.button("⬇️"):
+                    if st.button("⬇️",key=4c):
                         move("down")
                 with c3:
-                    if st.button("➡️"):
+                    if st.button("➡️",key=4d):
                         move("right")
             # --- Toon lokale viewport ---
             fig = show_viewport()
