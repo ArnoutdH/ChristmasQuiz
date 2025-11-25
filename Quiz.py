@@ -201,7 +201,7 @@ def main():
         st.header('Geef de EERSTE LETTER van onderstaande omschrijvingen als antwoord (zet de artiesten van jong (A) naar oud (B)):')
         st.write('1. Eerste (artiesten)naam van persoon A \n2. Tweede (artiesten)naam van persoon A \n3. Eerste (artiesten)naam van persoon B \n4. Tweede (artiesten)naam van persoon B.')
         password = st.text_input('Vul hieronder de 4 letters in:', type="password", key="password_input2")
-        if st.button("Controleren".key=2):
+        if st.button("Controleren",key=2):
             if password.lower() == "esej":
                 st.session_state.auth2 = True
             else:
