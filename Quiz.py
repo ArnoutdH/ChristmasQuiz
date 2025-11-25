@@ -134,7 +134,7 @@ def main():
                 st.error("Het codewoord is incorrect. Probeer het opnieuw.")
 
     if not st.session_state.auth1 and st.session_state.auth0:
-        title_placeholder.markdown('Vul de logikwis-oplossing in':)
+        title_placeholder.markdown('Vul de logikwis-oplossing in:')
         headers = ["Wie", "Waar", "Wat", "Welke kleur"]
 
         # Originele opties
