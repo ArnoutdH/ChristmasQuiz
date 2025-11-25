@@ -348,18 +348,18 @@ def main():
                 # Rij 1: Up
                 c1, c2, c3 = st.columns([1,1,1])
                 with c2:
-                    if st.button("⬆️",key=4a):
+                    if st.button("⬆️",key='4a'):
                         move("up")
                 # Rij 2: Left, Down, Right
                 c1, c2, c3 = st.columns([1,1,1])
                 with c1:
-                    if st.button("⬅️",key=4b):
+                    if st.button("⬅️",key='4b'):
                         move("left")
                 with c2:
-                    if st.button("⬇️",key=4c):
+                    if st.button("⬇️",key='4c'):
                         move("down")
                 with c3:
-                    if st.button("➡️",key=4d):
+                    if st.button("➡️",key='4d'):
                         move("right")
             # --- Toon lokale viewport ---
             fig = show_viewport()
