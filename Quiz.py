@@ -6,6 +6,8 @@ from datetime import date
 from googleapiclient.discovery import build
 import numpy as np
 import matplotlib.pyplot as plt
+import timeit
+import random
 
 # === AUTHENTICATION ===
 def get_gspread_client():
@@ -64,43 +66,9 @@ def get_or_create_sheet(spreadsheet, sheet_name):
     return sheet
 
 # === MAIN APP ===
-import streamlit as st
-import numpy as np
-import matplotlib.pyplot as plt
 
 def main():
     st.set_page_config(layout="wide")    
-
-    # --- MAZE ---
-    maze = [
-       "###############",
-       "#S...#.#......#",
-       "#.##.#.###.####",
-       "#.#..#.#......#",
-       "#.#.##.#.###.##",
-       "#.#....#.#.#..#",
-       "#.####.#.#.##.#",
-       "#....###.#.#..#",
-       "####.#...#...##",
-       "#....#.#.#.#.##",
-       "#.####.#.###.##",
-       "#.#....#.#....#",
-       "#.#.##.####.###",
-       "#....##E......#",
-       "###############"
-    ]
-
-    ROWS = len(maze)
-    COLS = len(maze[0])
-
-    # --- Colors ---
-    colors = {
-        "#": (0.1, 0.1, 0.1),
-        ".": (1, 1, 1),
-        "S": (0.2, 0.6, 1),
-        "E": (1, 0.3, 0.3),
-        "P": (1, 0.8, 0),
-    }
 
     def color(c):
         return np.array(colors[c])
@@ -142,14 +110,6 @@ def main():
         ax.set_yticks([])
         return fig
 
-    # --- Initialize session state ---
-    if "r" not in st.session_state or "c" not in st.session_state:
-        for r in range(ROWS):
-            for c in range(COLS):
-                if maze[r][c] == "S":
-                    st.session_state.r = r
-                    st.session_state.c = c
-
     # --- Placeholders ---
     title_placeholder = st.empty()
     viewport_placeholder = st.empty()
@@ -157,18 +117,114 @@ def main():
     
     # --- Toegang ---
     # Auth status alleen aanmaken als die nog niet bestaat
-    if "authenticated" not in st.session_state:
-        st.session_state.authenticated = False
-    if not st.session_state.authenticated:
+    if "auth0" not in st.session_state:
+        st.session_state.auth0 = False
+    if "auth1" not in st.session_state:
+        st.session_state.auth1 = False
+    if "auth2" not in st.session_state:
+        st.session_state.auth2 = False
+    
+    if not st.session_state.auth0:
         title_placeholder.markdown('Welkom bij deze digitale quizmaster!')
         password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input")
         if st.button("Controleren"):
             if password == "muts":
-                st.session_state.authenticated = True
+                st.session_state.auth0 = True
             else:
-                st.error("Codewoord is incorrect. Probeer het opnieuw.")
-                
-    if st.session_state.authenticated == True:
+                st.error("Het codewoord is incorrect. Probeer het opnieuw.")
+
+    if not st.session_state.auth1 and st.session_state.auth0:
+        title_placeholder.markdown('Vul de logikwis-oplossing in':)
+        headers = ["Wie", "Waar", "Wat", "Welke kleur"]
+
+        # Originele opties
+        opties_origineel = {
+            "Wie": ["Anne", "Bram", "Clara"],
+            "Waar": ["Kerstkrans", "Kerstboom", "Kerststal"],
+            "Wat": ["Kersttrui", "Kerstlampjes", "Kerstmok"],
+            "Welke kleur": ["Geel", "Rood", "Groen"]}
+        
+        # Maak een gehusselde kopie van de opties
+        opties = {}
+        for key, lijst in opties_origineel.items():
+            nieuwe_lijst = lijst.copy()
+            random.shuffle(nieuwe_lijst)
+            opties[key] = nieuwe_lijst
+
+        tabel_data = {}
+        for row in range(1, 4):
+            cols = st.columns(4)
+            tabel_data[row] = {}
+            for col_index, header in enumerate(headers):
+                tabel_data[row][header] = cols[col_index].selectbox(
+                    f"{header} (rij {row})",
+                    opties[header],
+                    key=f"{header}_{row}")
+        
+        st.write("### Jouw invoer")
+        st.json(tabel_data)
+    
+        correct_solution = {
+            1: {"Wie": "Anne", "Waar": "Kerstkrans", "Wat": "Kersttrui", "Welke kleur": "Geel"},
+            2: {"Wie": "Bram", "Waar": "Kerstboom", "Wat": "Kerstlampjes", "Welke kleur": "Rood"},
+            3: {"Wie": "Clara", "Waar": "Kerststal", "Wat": "Kerstmok", "Welke kleur": "Groen"}}
+        
+        st.header("Controle")
+        if st.button("Controleer oplossing"):
+            alles_correct = True
+            for rij in range(1, 4):
+                for kolom in headers:
+                    if tabel_data[rij][kolom] != correct_solution[rij][kolom]:
+                        alles_correct = False
+                        break
+                if not alles_correct:
+                    break
+        
+            if alles_correct:
+                st.success("Correct!")
+                st.session_state.auth1=True
+            else:
+                st.error("Probeer het opnieuw, er is minimaal 1 veld verkeerd ingevuld!")
+
+    if st.session_state.auth0 and st.session_state.auth1:
+        # --- MAZE ---
+        maze = [
+           "###############",
+           "#S...#.#......#",
+           "#.##.#.###.####",
+           "#.#..#.#......#",
+           "#.#.##.#.###.##",
+           "#.#....#.#.#..#",
+           "#.####.#.#.##.#",
+           "#....###.#.#..#",
+           "####.#...#...##",
+           "#....#.#.#.#.##",
+           "#.####.#.###.##",
+           "#.#....#.#....#",
+           "#.#.##.####.###",
+           "#....##E......#",
+           "###############"
+        ]
+    
+        ROWS = len(maze)
+        COLS = len(maze[0])
+    
+        # --- Colors ---
+        colors = {
+            "#": (0.1, 0.1, 0.1),
+            ".": (1, 1, 1),
+            "S": (0.2, 0.6, 1),
+            "E": (1, 0.3, 0.3),
+            "P": (1, 0.8, 0)}
+    
+        # --- Initialize session state ---
+        if "r" not in st.session_state or "c" not in st.session_state:
+            for r in range(ROWS):
+                for c in range(COLS):
+                    if maze[r][c] == "S":
+                        st.session_state.r = r
+                        st.session_state.c = c
+        
         # --- Status / Titel ---
         title_placeholder.markdown("""
         ### Vind de uitgang van het doolhof
@@ -182,7 +238,7 @@ def main():
             controls_placeholder.empty()
     
             # Update titel/status
-            title_placeholder.markdown("🎉 JE HEBT DE UITGANG GEVONDEN! 🎉")
+            title_placeholder.markdown("Je hebt de uitgang gevonden!")
     
             # Maak volledig doolhof
             full_maze = np.zeros((ROWS, COLS, 3))
@@ -205,7 +261,7 @@ def main():
                 if clicked:
                     viewport_placeholder.empty()
                     controls_placeholder.empty()
-                    title_placeholder.title('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is opgeslagen.')
+                    title_placeholder.title('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is {timeit.timeit()}.')
     
         else:
             # --- Mobielvriendelijke joystick ---
