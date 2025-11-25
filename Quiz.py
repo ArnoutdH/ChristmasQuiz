@@ -144,26 +144,34 @@ def main():
             "Wat": ["Kersttrui", "Kerstlampjes", "Kerstmok"],
             "Welke kleur": ["Geel", "Rood", "Groen"]}
         
-        # Maak een gehusselde kopie van de opties
-        opties = {}
-        for key, lijst in opties_origineel.items():
-            nieuwe_lijst = lijst.copy()
-            random.shuffle(nieuwe_lijst)
-            opties[key] = nieuwe_lijst
+        headers = list(opties_origineel.keys())
 
-        tabel_data = {}
+        # Maak een stabiele shuffle die niet opnieuw wordt gedaan
+        if "gehusselde_opties" not in st.session_state:
+            st.session_state.gehusselde_opties = {}
+            for key, lijst in opties_origineel.items():
+                nieuwe = lijst.copy()
+                random.shuffle(nieuwe)
+                st.session_state.gehusselde_opties[key] = nieuwe
+        
+        opties = st.session_state.gehusselde_opties   # Gebruik de versie die blijft bestaan
+
+        # Bewaar ook de tabel-invoer in session_state zodat dat niet verspringt
+        if "tabel" not in st.session_state:
+            st.session_state.tabel = {rij: {kol: None for kol in headers} for rij in range(1, 4)}
+
+        st.subheader("Vul je oplossing in")
+
         for row in range(1, 4):
             cols = st.columns(4)
-            tabel_data[row] = {}
-            for col_index, header in enumerate(headers):
-                tabel_data[row][header] = cols[col_index].selectbox(
-                    f"{header} (rij {row})",
-                    opties[header],
-                    key=f"{header}_{row}")
+            for i, kolom in enumerate(headers):
+                st.session_state.tabel[row][kolom] = cols[i].selectbox(
+                    f"{kolom} (rij {row})",
+                    opties[kolom],
+                    key=f"{kolom}_{row}"
+                )
         
-        st.write("### Jouw invoer")
-        st.json(tabel_data)
-    
+        tabel_data = st.session_state.tabel    
         correct_solution = {
             1: {"Wie": "Anne", "Waar": "Kerstkrans", "Wat": "Kersttrui", "Welke kleur": "Geel"},
             2: {"Wie": "Bram", "Waar": "Kerstboom", "Wat": "Kerstlampjes", "Welke kleur": "Rood"},
