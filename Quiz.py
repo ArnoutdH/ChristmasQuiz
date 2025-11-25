@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import timeit
 import random
+import base64
 
 # === AUTHENTICATION ===
 def get_gspread_client():
@@ -194,6 +195,29 @@ def main():
             else:
                 st.error("Probeer het opnieuw, er is minimaal 1 veld verkeerd ingevuld!")
 
+    if not st.session_state.auth2 and (st.session_state.auth0 and st.session_state.auth1):
+
+# Bestand openen
+audio_file = open("geluid.mp3", "rb").read()
+audio_base64 = base64.b64encode(audio_file).decode()
+
+# HTML audio player met controls
+audio_player = f"""
+<audio id="myAudio" controls>
+  <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
+<br>
+<button onclick="document.getElementById('myAudio').play()">▶️ Play</button>
+<button onclick="document.getElementById('myAudio').pause()">⏸️ Pauze</button>
+<button onclick="document.getElementById('myAudio').currentTime=0; document.getElementById('myAudio').pause()">🔄 Reset</button>
+"""
+
+st.markdown(audio_player, unsafe_allow_html=True)
+
+
+
+    
     if st.session_state.auth0 and st.session_state.auth1:
         # --- MAZE ---
         maze = [
@@ -269,7 +293,7 @@ def main():
                 if clicked:
                     viewport_placeholder.empty()
                     controls_placeholder.empty()
-                    title_placeholder.title('Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is {timeit.timeit()}.')
+                    title_placeholder.title(f'Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is {timeit.timeit()}.')
     
         else:
             # --- Mobielvriendelijke joystick ---
