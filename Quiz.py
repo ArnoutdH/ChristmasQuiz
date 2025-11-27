@@ -110,11 +110,6 @@ def main():
         ax.set_xticks([])
         ax.set_yticks([])
         return fig
-
-    # --- Placeholders ---
-    title_placeholder = st.empty()
-    viewport_placeholder = st.empty()
-    controls_placeholder = st.empty()
     
     # --- Toegang ---
     # Auth status alleen aanmaken als die nog niet bestaat
@@ -131,7 +126,7 @@ def main():
         st.title('Welkom bij deze digitale quizmaster!')
         st.header('Belangrijke informatie:')
         st.write('ALLE VOORTGANG op deze site gaat verloren bij het herladen (refreshen) van deze pagina! \nBeter is het om op een knop (bijvoorbeeld een "Controleren"-knop) te klikken om te herladen of om de huidige pagina te ontdoen van de vorige. \nSoms kan ook het beeld verspringen, zoom even uit om te checken of dit het geval is. \nDit is een eigen-gemaakte website, niet alles werkt zo goed als ik zou willen :)...')
-        st.write('Ondanks dat de site standaard uitgerust is met extra knoppen (rechtsboven als -onder), dienen deze niet gebruikt te worden. Ook bij het niet functioneren van de site, kunnen deze knoppen dit niet oplossen; neem contact op met Arnout :)')
+        st.write('Ondanks dat de site standaard uitgerust is met extra knoppen (rechtsboven als -onder), mag/hoef je deze niet te gebruiken. Bij het mogeljk niet functioneren van de site kunnen deze knoppen dit niet oplossen; neem contact op met Arnout :)')
         
         st.header('Codewoord om door te gaan:')
         password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input0")
@@ -143,9 +138,9 @@ def main():
                 st.error("Het codewoord is incorrect. Probeer het opnieuw.")
 
     if not st.session_state.auth1 and st.session_state.auth0:
-        st.title('Logikwis')
-        st.header('Wie krijgt welk cadeau, waar ligt deze en welke kleur inpakpapier is gebruikt?')
-        st.write('LET OP: vul voor de zekerheid de antwoordregels in op volgorde van Anne-Bram-Clara. \n(De al weergegeven antwoorden zijn volledig willekeurig gekozen en dienen aangepast te worden).')
+        st.header('Ho-Ho-Holykwis')
+        st.subheader('Wie krijgt welk cadeau, waar ligt deze en welke kleur inpakpapier is gebruikt?')
+        st.write('LET OP: vul de antwoordregels in op volgorde van Anne-Bram-Clara. \n(De al weergegeven antwoorden zijn willekeurig gekozen en dienen aangepast te worden).')
         
         headers = ["Wie", "Waar", "Wat", "Welke kleur"]
 
@@ -162,8 +157,9 @@ def main():
         if "gehusselde_opties" not in st.session_state:
             st.session_state.gehusselde_opties = {}
             for key, lijst in opties_origineel.items():
-                nieuwe = lijst.copy()
-                random.shuffle(nieuwe)
+                if key != 'Wie':
+                    nieuwe = lijst.copy()
+                    random.shuffle(nieuwe)
                 st.session_state.gehusselde_opties[key] = nieuwe
         
         opties = st.session_state.gehusselde_opties   # Gebruik de versie die blijft bestaan
@@ -205,7 +201,8 @@ def main():
                 st.error("Probeer het opnieuw, er is minimaal 1 veld verkeerd ingevuld!")
 
     if not st.session_state.auth2 and (st.session_state.auth0 and st.session_state.auth1):
-        st.header('Geef de EERSTE LETTER van onderstaande omschrijvingen als antwoord (zet de artiesten van jong (A) naar oud (B)):')
+        st.header('Google Translates it')
+        st.subheader('Geef de EERSTE LETTER van onderstaande omschrijvingen als antwoord (zet de artiesten van jong (A) naar oud (B)):')
         st.write('1. Eerste (artiesten)naam van persoon A \n2. Tweede (artiesten)naam van persoon A \n3. Eerste (artiesten)naam van persoon B \n4. Tweede (artiesten)naam van persoon B.')
         password = st.text_input('Vul hieronder de 4 letters in:', type="password", key="password_input2")
         if st.button("Controleren",key=2):
@@ -231,11 +228,13 @@ def main():
         st.markdown(audio_player, unsafe_allow_html=True)
 
     if not st.session_state.auth3 and (st.session_state.auth0 and st.session_state.auth1 and st.session_state.auth2):
-        st.header('Geef het codewoord hieronder op:')
+        st.header('MedleyMistery')
+        st.subheader('Raad het codewoord:')
         password = st.text_input('Vul hieronder het codewoord in:', type="password", key="password_input3")
         if st.button("Controleren",key=3):
             if password.lower() == "sneeuw":
                 st.session_state.auth3 = True
+                st.succes('Correct!')
             else:
                 st.error("Het is niet correct. Probeer het opnieuw.")
         
@@ -253,9 +252,12 @@ def main():
         """
 
         st.markdown(audio_player, unsafe_allow_html=True)
-
     
     if st.session_state.auth0 and st.session_state.auth1 and st.session_state.auth2 and st.session_state.auth3:
+        # --- Placeholders ---
+        viewport_placeholder = st.empty()
+        controls_placeholder = st.empty()
+       
         # --- MAZE ---
         maze = [
            "###############",
@@ -295,18 +297,12 @@ def main():
                         st.session_state.c = c
         
         # --- Status / Titel ---
-        st.title('Vind de uitgang van het doolhof')
-        st.header('LET OP: je kan slechts direct om je heen kijken (3x3) en het doolhof is 15×15 blokjes groot.')
-        st.write('Blauw = start, geel = huidige locatie, rood = uitgang')
+        st.header('Doolhof-je-zoek')
+        st.subheader('Je kan slechts direct om je heen kijken (3x3) en het doolhof is 15×15 blokjes groot.')
+        st.write('Blauw = start, geel = huidige locatie, rood = uitgang. Je hebt papier tot je beschikking ;)...')
         
         # --- Check exit ---
         if maze[st.session_state.r][st.session_state.c] == "E":
-            # Wis oude viewport en controls
-            controls_placeholder.empty()
-    
-            # Update titel/status
-            title_placeholder.markdown("Je hebt de uitgang gevonden!")
-    
             # Maak volledig doolhof
             full_maze = np.zeros((ROWS, COLS, 3))
             for r in range(ROWS):
@@ -323,12 +319,11 @@ def main():
     
             # Doorgaan knop rechts onder
             col1, col2, col3 = st.columns([3,3,1])
-            clicked=controls_placeholder.button("➡️ Doorgaan",key=4)
+            clicked=controls_placeholder.button("Je hebt de uitgang gevonden! \nKlik hier om door te gaan.",key=4)
             with col3:
                 if clicked:
                     viewport_placeholder.empty()
-                    controls_placeholder.empty()
-                    title_placeholder.title(f'Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is {datetime.now().strftime("%H:%M")}.')
+                    controls_placeholder.empty(f'Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is {datetime.now().strftime("%H:%M")}.')
     
         else:
             # --- Mobielvriendelijke joystick ---
