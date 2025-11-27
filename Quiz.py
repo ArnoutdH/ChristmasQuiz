@@ -10,64 +10,7 @@ from datetime import datetime
 import random
 import base64
 
-# === AUTHENTICATION ===
-def get_gspread_client():
-    creds_dict = st.secrets["gcp_service_account"]
-
-    scope = ["https://spreadsheets.google.com/feeds",
-        "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_file_dict(creds_dict, scope)
-    return gspread.authorize(creds), creds
-
-# === DRIVE API: Find latest spreadsheet in folder ===
-def get_latest_spreadsheet(creds, folder_name):
-    drive_service = build('drive', 'v3', credentials=creds)
-
-    # 🔄 Search folder by name, anywhere (not just in root)
-    query_folder = (
-        f"name='{folder_name}' and mimeType='application/vnd.google-apps.folder' and trashed = false"
-    )
-    folder_results = drive_service.files().list(q=query_folder, fields="files(id, name)").execute()
-    folders = folder_results.get('files', [])
-
-    if not folders:
-        st.error(f"📁 Folder '{folder_name}' not found. Make sure it's shared with the service account.")
-        return None
-
-    folder_id = folders[0]['id']
-
-    # Spreadsheet search stays the same...
-    mime_types = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'application/vnd.ms-excel',
-        'application/vnd.google-apps.spreadsheet']
-    mime_query = " or ".join([f"mimeType='{mime}'" for mime in mime_types])
-    query_files = f"'{folder_id}' in parents and ({mime_query}) and trashed = false"
-
-    files_results = drive_service.files().list(
-        q=query_files,
-        orderBy="createdTime desc",
-        fields="files(id, name, createdTime)",
-        pageSize=1
-    ).execute()
-
-    files = files_results.get('files', [])
-    if not files:
-        st.error("📄 No spreadsheets found in the folder.")
-        return None
-
-    return files[0]  
-
-# === SPREADSHEET MANAGEMENT ===
-def get_or_create_sheet(spreadsheet, sheet_name):
-    try:
-        sheet = spreadsheet.worksheet(sheet_name)
-    except :
-        sheet = spreadsheet.add_worksheet(title=sheet_name, rows="100", cols="20")
-        sheet.append_row(HEADERS)
-    return sheet
-
 # === MAIN APP ===
-
 def main():
     st.set_page_config(layout="wide")    
 
@@ -157,8 +100,8 @@ def main():
         if "gehusselde_opties" not in st.session_state:
             st.session_state.gehusselde_opties = {}
             for key, lijst in opties_origineel.items():
+                nieuwe = lijst.copy()
                 if key != 'Wie':
-                    nieuwe = lijst.copy()
                     random.shuffle(nieuwe)
                 st.session_state.gehusselde_opties[key] = nieuwe
         
