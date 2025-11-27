@@ -6,7 +6,7 @@ from datetime import date
 from googleapiclient.discovery import build
 import numpy as np
 import matplotlib.pyplot as plt
-import timeit
+from datetime import datetime
 import random
 import base64
 
@@ -128,7 +128,13 @@ def main():
         st.session_state.auth3 = False
     
     if not st.session_state.auth0:
-        title_placeholder.markdown('Welkom bij deze digitale quizmaster!')
+        st.title('Welkom bij deze digitale quizmaster!')
+        st.header('Belangrijke informatie:')
+        st.write('ALLE VOORTGANG op deze site gaat verloren bij het herladen (refreshen) van deze pagina!')
+        st.write('Ondanks dat de site standaard uitgerust is met extra knoppen (rechtsboven als -onder), dienen deze niet gebruikt te worden. Ook bij het niet functioneren van de site, kunnen deze knoppen dit niet oplossen; neem contact op met Arnout :)')
+        st.write('Soms is het noodzakelijk eenmaal op een toets te klikken om door te gaan naar de volgende pagina. \nVergelijkbaar kan de vorige pagina zichtbaar blijven totdat een toets op de nieuwe pagina is ingedrukt.')
+        
+        st.header('Codewoord om door te gaan:')
         password = st.text_input('Vul hieronder het 4-letterige codewoord in:', type="password", key="password_input0")
         if st.button("Controleren",key=0):
             if password.lower() == "muts":
@@ -137,7 +143,10 @@ def main():
                 st.error("Het codewoord is incorrect. Probeer het opnieuw.")
 
     if not st.session_state.auth1 and st.session_state.auth0:
-        title_placeholder.markdown('Vul de logikwis-oplossing in:')
+        st.title('Logikwis')
+        st.header('Wie krijgt welk cadeau, waar ligt deze en welke kleur inpakpapier is gebruikt?')
+        st.write('LET OP: vul voor de zekerheid de antwoordregels in op volgorde van Anne-Bram-Clara.')
+        
         headers = ["Wie", "Waar", "Wat", "Welke kleur"]
 
         # Originele opties
@@ -163,8 +172,6 @@ def main():
         if "tabel" not in st.session_state:
             st.session_state.tabel = {rij: {kol: None for kol in headers} for rij in range(1, 4)}
 
-        st.subheader("Vul je oplossing in")
-
         for row in range(1, 4):
             cols = st.columns(4)
             for i, kolom in enumerate(headers):
@@ -180,7 +187,7 @@ def main():
             2: {"Wie": "Bram", "Waar": "Kerstboom", "Wat": "Kerstlampjes", "Welke kleur": "Rood"},
             3: {"Wie": "Clara", "Waar": "Kerststal", "Wat": "Kerstmok", "Welke kleur": "Groen"}}
         
-        st.header("Controle")
+        st.header("Controle:")
         if st.button("Controleren",key=1):
             alles_correct = True
             for rij in range(1, 4):
@@ -252,8 +259,6 @@ def main():
 
         st.markdown(audio_player, unsafe_allow_html=True)
 
-
-
     
     if st.session_state.auth0 and st.session_state.auth1 and st.session_state.auth2 and st.session_state.auth3:
         # --- MAZE ---
@@ -295,12 +300,10 @@ def main():
                         st.session_state.c = c
         
         # --- Status / Titel ---
-        title_placeholder.markdown("""
-        ### Vind de uitgang van het doolhof
-        Let op: je kan slechts direct om je heen kijken. Het doolhof is 15×15 groot.  
-        **Blauw = start, geel = huidige locatie, rood = uitgang.**
-        """)
-    
+        st.title('Vind de uitgang van het doolhof')
+        st.header('LET OP: je kan slechts direct om je heen kijken (3x3) en het doolhof is 15×15 blokjes groot.
+        st.write('Blauw = start, geel = huidige locatie, rood = uitgang')
+        
         # --- Check exit ---
         if maze[st.session_state.r][st.session_state.c] == "E":
             # Wis oude viewport en controls
@@ -330,7 +333,7 @@ def main():
                 if clicked:
                     viewport_placeholder.empty()
                     controls_placeholder.empty()
-                    title_placeholder.title(f'Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is {timeit.timeit()}.')
+                    title_placeholder.title(f'Je hebt de escaperoom verlaten, GEFELICITEERD! \nJe tijd is {datetime.now().strftime("%H:%M")}.')
     
         else:
             # --- Mobielvriendelijke joystick ---
