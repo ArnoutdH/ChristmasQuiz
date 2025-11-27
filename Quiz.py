@@ -301,10 +301,10 @@ def main():
             fig = show_viewport()
             viewport_placeholder.pyplot(fig, use_container_width=True)
 
-if st.session_state.auth4:
-    st.header('Einde escaperoom')
-    st.subheader('GEFELICITEERD! Dit was het einde van de escaperoom.')
-    st.write(f'Je hebt bij dezen de escaperoom verlaten. \nDe huidige tijd is {datetime.now().strftime("%H:%M")}. Heb je de elfjes op tijd kunnen helpen met het terugvinden van de verwarde Kerstman?')
+    if st.session_state.auth4:
+        st.header('Einde escaperoom')
+        st.subheader('GEFELICITEERD! Dit was het einde van de escaperoom.')
+        st.write(f'Je hebt bij dezen de escaperoom verlaten. \nDe huidige tijd is {datetime.now().strftime("%H:%M")}. Heb je de elfjes op tijd kunnen helpen met het terugvinden van de verwarde Kerstman?')
     
 if __name__ == "__main__":
     main()
