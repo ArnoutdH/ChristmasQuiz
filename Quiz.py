@@ -177,7 +177,7 @@ def main():
         if st.button("Controleren",key=3):
             if password.lower() == "sneeuw":
                 st.session_state.auth3 = True
-                st.succes('Correct!')
+                st.success('Correct!')
             else:
                 st.error("Het is niet correct. Probeer het opnieuw.")
         
