@@ -10,6 +10,7 @@ from datetime import datetime
 import random
 import base64
 from zoneinfo import ZoneInfo
+import pytz
 
 # === MAIN APP ===
 def main():
@@ -305,7 +306,8 @@ def main():
     if st.session_state.auth4:
         st.header('Einde escaperoom')
         st.subheader('GEFELICITEERD! Dit was het einde van de escaperoom.')
-        now = datetime.now(ZoneInfo("Europe/Amsterdam")).strftime("%H:%M:%S")
+        #now = datetime.now(ZoneInfo("Europe/Amsterdam")).strftime("%H:%M:%S")
+        now = datetime.now(pytz.timezone("Europe/Amsterdam")).strftime("%H:%M:%S")
         st.write(f'Je hebt bij dezen de escaperoom verlaten. \nDe huidige tijd is {now}. \nHeb je de elfjes op tijd kunnen helpen met het terugvinden van de verwarde Kerstman?')
     
 if __name__ == "__main__":
