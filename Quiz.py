@@ -130,7 +130,7 @@ def main():
     if not st.session_state.auth0:
         st.title('Welkom bij deze digitale quizmaster!')
         st.header('Belangrijke informatie:')
-        st.write('ALLE VOORTGANG op deze site gaat verloren bij het herladen (refreshen) van deze pagina!')
+        st.write('ALLE VOORTGANG op deze site gaat verloren bij het herladen (refreshen) van deze pagina! \nBeter is het om op een knop (bijvoorbeeld een "Controleren"-knop) te klikken om te herladen, soms kan ook het beeld verspringen, zoom even uit om te checken of dit het geval is. \nDit is een eigen-gemaakte website en daardoor niet perfect...')
         st.write('Ondanks dat de site standaard uitgerust is met extra knoppen (rechtsboven als -onder), dienen deze niet gebruikt te worden. Ook bij het niet functioneren van de site, kunnen deze knoppen dit niet oplossen; neem contact op met Arnout :)')
         st.write('Soms is het noodzakelijk eenmaal op een toets te klikken om door te gaan naar de volgende pagina. \nVergelijkbaar kan de vorige pagina zichtbaar blijven totdat een toets op de nieuwe pagina is ingedrukt.')
         
