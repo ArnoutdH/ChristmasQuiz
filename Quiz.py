@@ -251,9 +251,6 @@ def main():
           Your browser does not support the audio element.
         </audio>
         <br>
-        <button onclick="document.getElementById('myAudio').play()">▶️ Play</button>
-        <button onclick="document.getElementById('myAudio').pause()">⏸️ Pauze</button>
-        <button onclick="document.getElementById('myAudio').currentTime=0; document.getElementById('myAudio').pause()">🔄 Reset</button>
         """
 
         st.markdown(audio_player, unsafe_allow_html=True)
