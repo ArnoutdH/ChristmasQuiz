@@ -139,13 +139,14 @@ def main():
         if st.button("Controleren",key=0):
             if password.lower() == "muts":
                 st.session_state.auth0 = True
+                st.success("Correct!")
             else:
                 st.error("Het codewoord is incorrect. Probeer het opnieuw.")
 
     if not st.session_state.auth1 and st.session_state.auth0:
         st.title('Logikwis')
         st.header('Wie krijgt welk cadeau, waar ligt deze en welke kleur inpakpapier is gebruikt?')
-        st.write('LET OP: vul voor de zekerheid de antwoordregels in op volgorde van Anne-Bram-Clara.')
+        st.write('LET OP: vul voor de zekerheid de antwoordregels in op volgorde van Anne-Bram-Clara. \n(De al weergegeven antwoorden zijn volledig willekeurig gekozen en dienen aangepast te worden).')
         
         headers = ["Wie", "Waar", "Wat", "Welke kleur"]
 
