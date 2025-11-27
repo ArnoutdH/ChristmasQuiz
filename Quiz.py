@@ -307,7 +307,8 @@ def main():
         st.header('Einde escaperoom')
         st.subheader('GEFELICITEERD! Dit was het einde van de escaperoom.')
         #now = datetime.now(ZoneInfo("Europe/Amsterdam")).strftime("%H:%M:%S")
-        now = datetime.now(pytz.timezone("Europe/Amsterdam")).strftime("%H:%M:%S")
+        #now = datetime.now(pytz.timezone("Europe/Amsterdam")).strftime("%H:%M:%S")
+        now=''
         st.write(f'Je hebt bij dezen de escaperoom verlaten. \nDe huidige tijd is {now}. \nHeb je de elfjes op tijd kunnen helpen met het terugvinden van de verwarde Kerstman?')
     
 if __name__ == "__main__":
