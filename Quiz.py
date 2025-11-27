@@ -301,7 +301,7 @@ def main():
         
         # --- Status / Titel ---
         st.title('Vind de uitgang van het doolhof')
-        st.header('LET OP: je kan slechts direct om je heen kijken (3x3) en het doolhof is 15×15 blokjes groot.
+        st.header('LET OP: je kan slechts direct om je heen kijken (3x3) en het doolhof is 15×15 blokjes groot.')
         st.write('Blauw = start, geel = huidige locatie, rood = uitgang')
         
         # --- Check exit ---
