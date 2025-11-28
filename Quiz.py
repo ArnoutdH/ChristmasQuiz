@@ -245,8 +245,8 @@ def main():
         
         # --- Status / Titel ---
         st.header('Doolhof-je-zoek')
-        st.write('Goed gedaan! Jullie hebben de Kerstster tot ergens in dit doolhof getraceert. Vinden jullie de ster voordat hij uitdooft?') 
-        st.subheader('Je kan slechts direct om je heen kijken (3x3) en het doolhof is 15×15 blokjes groot.')
+        st.subheader('Goed gedaan! Jullie hebben de Kerstster tot ergens in dit doolhof getraceert. Vinden jullie de ster voordat hij uitdooft?') 
+        st.write('Je kan slechts direct om je heen kijken (3x3) en het doolhof is 15×15 blokjes groot.')
         st.write('Blauw = start, geel = huidige locatie, rood = uitgang. Je hebt papier tot je beschikking ;)...')
         
         # --- Check exit ---
@@ -266,7 +266,7 @@ def main():
             viewport_placeholder.pyplot(fig, use_container_width=True)
     
             # Doorgaan knop rechts onder
-            clicked=controls_placeholder.button("Je hebt de uitgang gevonden! \nKlik hier om door te gaan.",key=4)
+            clicked=controls_placeholder.button("Je hebt de Kerstster gevonden! \nKlik hier om door te gaan.",key=4)
             if clicked:
                 viewport_placeholder.empty()
                 controls_placeholder.empty()
