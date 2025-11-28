@@ -245,6 +245,7 @@ def main():
         
         # --- Status / Titel ---
         st.header('Doolhof-je-zoek')
+        st.write('Goed gedaan! Jullie hebben de Kerstster tot ergens in dit doolhof getraceert. Vinden jullie de ster voordat hij uitdooft?') 
         st.subheader('Je kan slechts direct om je heen kijken (3x3) en het doolhof is 15×15 blokjes groot.')
         st.write('Blauw = start, geel = huidige locatie, rood = uitgang. Je hebt papier tot je beschikking ;)...')
         
